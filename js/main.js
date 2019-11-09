@@ -1,9 +1,14 @@
 console.log("Creating new phaser game...");
 
-var config = {
+let gameDiv = document.getElementById("game")
+gameDiv.style.height = gameDiv.parentNode.height+"px"
+
+let config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: "100",
+    height: "100",
+    parent: document.getElementById("game"),
+    scale: { mode: Phaser.Scale.RESIZE },
     scene: {
         preload: preload,
         create: create,
