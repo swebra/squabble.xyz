@@ -1,8 +1,5 @@
 console.log("Creating new phaser game...");
 
-let gameDiv = document.getElementById("game")
-gameDiv.style.height = gameDiv.parentNode.height+"px"
-
 let config = {
     type: Phaser.AUTO,
     width: "100",
