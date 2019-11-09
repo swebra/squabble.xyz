@@ -22,8 +22,9 @@ function preload ()
 {
 }
 
-function create ()
-{
+function create () {
+    // Send the server a newplayer event
+    Client.askNewPlayer();
 }
 
 function update ()
