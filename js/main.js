@@ -38,6 +38,8 @@ function main() {
 }
 
 function preload () {
+    console.log("preload");
+    this.load.audio("slap", ["assets/audio/squabble.wav"]);
 }
 
 
@@ -47,9 +49,16 @@ let scoreText;
 let livesText;
 // set physics boundaries
 let levelWidth = 2000;
-let levelHeight = 2000;
+let levelHeight = 3000;
+
+let music;
 
 function create () {
+    console.log("create");
+
+    music = this.sound.add("slap");
+    music.play();
+    console.log("after play");
 
     // set score and lives
     scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
@@ -111,9 +120,10 @@ function createLevel(game) {
     for (let i = 0; i < 5; i++) {
         // add platforms                       x    y    w   h
         for (let j = 0; j < 4; j++) {
-            let px = 400*i + 100 + Math.floor(Math.random()*200);
-            let py = levelHeight - 250 - 200*j;
-            let pw = Math.floor(Math.random(300)*100 + 150);
+            let offset = j%2;
+            let px = 400*i + 100 + offset*200;
+            let py = levelHeight - 210 - 300*j;
+            let pw = 200;
             game.platforms.add(game.add.rectangle(px, py,pw , 30, platformColor));
         }
     }
@@ -143,7 +153,7 @@ function update () {
     }
     if (cursors.up.isDown && this.gPlayer.body.touching.down) {
     // jumping
-        this.gPlayer.body.setVelocityY(-300 * this.client.player.lives);
+        this.gPlayer.body.setVelocityY(Math.max(-600 - 200*score, -1000));
     }
 
         // emit player movement
