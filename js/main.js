@@ -62,8 +62,8 @@ function create () {
 
     // create player
     this.playerSize = 50; // In px
-    const playerRect = this.add.rectangle(100, 200, game.playerSize,
-                                          game.playerSize, this.client.player.color);
+    const playerRect = this.add.rectangle(100, 200, this.playerSize,
+                                          this.playerSize, this.client.player.color);
     this.gPlayer = this.physics.add.existing(playerRect);
     this.gPlayer.body.setGravityY(500);
     this.gPlayer.body.setCollideWorldBounds(true);
