@@ -1,5 +1,5 @@
 console.log("Creating new phaser game...");
-
+/*  GAME    */
 let config = {
     type: Phaser.AUTO,
     width: "100",
@@ -21,7 +21,6 @@ function preload ()
 
 function create () {
     // Send the server a newplayer event
-    
     Client.askNewPlayer();
 }
 
@@ -33,7 +32,7 @@ function update () {
     else if (cursors.right.isDown) {
         console.log("Right");
     }
-    else if (cursors.up.isDown || cursors.space.isDown){
+    else if (cursors.up.isDown || cursors.space.isDown) {
         console.log("jump");
     } else {
         console.log("nothing");

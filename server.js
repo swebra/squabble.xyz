@@ -1,3 +1,4 @@
+/*  SERVER  */
 let express = require('express');
 let app = express();
 let server = require('http').Server(app);
@@ -31,13 +32,16 @@ function getAllPlayers() {
 
 function main() {
     io.on("connection", (socket) => {
+        /* RX EVENTS */
         socket.on("newplayer", () => {
             // Create a new "player" object and assign it to the new socket
             // object
             socket.player = {
                 id: lastPlayerID++,
             };
+            socket.emit("yourid", socket.id);
             // Tell the new player about the other players
+
             socket.emit("allplayers", getAllPlayers());
             // Tells existing players that there is a new player
             socket.broadcast.emit("newplayer", socket.player);
