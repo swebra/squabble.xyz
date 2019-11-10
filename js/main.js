@@ -63,7 +63,7 @@ function create () {
 
     // create other players and set collision stuff
     this.otherPlayers = this.physics.add.group();
-    this.client.currentPlayers.forEach((player) => {
+    this.client.tmpPlayers.forEach((player) => {
 	if (this.client.player.id != player.id) {
 	    addEnemy(this, player);
 	}

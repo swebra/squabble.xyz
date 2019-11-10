@@ -4,7 +4,6 @@ class Client {
     constructor() {
         this.socket = io.connect();
         this.player = null;
-        this.players = [];
     }
 
     // TX EVENT - newplayer
@@ -34,7 +33,7 @@ class Client {
                 this.socket.on("currentplayers", (data) => {
 		    // Just store the list of current players for later. This
 		    // will be used after the game object has been initialized.
-		    this.currentPlayers = data;
+		    this.tmpPlayers = data;
                     resolve();
                 });
             });
@@ -74,7 +73,6 @@ class Client {
         });
 
         this.socket.on("newplayer", (data) => {
-            this.players.push(data);
 	    addEnemy(this.game, data);
         });
     }
