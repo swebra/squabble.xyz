@@ -39,7 +39,7 @@ function main() {
 
 function preload () {
     console.log("preload");
-    this.load.audio("slap", ["assets/audio/squabble.wav"]);
+    this.load.audio("slap", ["assets/audio/squabble.mp3"]);
 }
 
 
