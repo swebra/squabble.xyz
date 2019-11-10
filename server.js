@@ -36,7 +36,7 @@ class Server {
     /*  EVENTS  */
     setupEvents() {
         this.io.on("connection", (socket) => {
-            /*  RX EVENTS    */
+            /*  RX EVENTS  */
             socket.on("newplayer", () => {
                 // Create a new "player" object and assign it to the new socket
                 // object
@@ -52,13 +52,13 @@ class Server {
                 console.log(getAllPlayers());
             });
 
-            /*  TX EVENTS   */
+            /*  TX EVENTS  */
 
         });
     }
 }
 
-function main() {
+let main = () => {
     let server = new Server();
 }
 
