@@ -17,7 +17,7 @@ class Server {
             res.sendFile(__dirname+'/index.html');
         });
 
-        this.server.listen(80, () => { // Listens to port 8081
+        this.server.listen(8081, () => { // Listens to port 8081
             console.log('Listening on ' + this.server.address().port);
         });
         this.lastPlayerID = 0;
@@ -38,14 +38,15 @@ class Server {
                 // send the client their ID
                 socket.emit("yourid", socket.player.id); // TX
 
-		// send current players to the new player
-		socket.emit("currentplayers", Object.values(this.players));
+                // send current players to the new player
+                socket.emit("currentplayers", Object.values(this.players));
 
-		// tell pre-existing players about new player
-		socket.broadcast.emit("newplayer", socket.player);
+                // tell pre-existing players about new player
+                socket.broadcast.emit("newplayer", socket.player);
             });
 
             socket.on("killplayer",(data) => {
+                console.log(data);
                 this.players[data.id].lives -= data.damage;
                 this.updatePlayer(socket, this.players[data.id]);
                 if(this.players[data.id].lives <= 0) {
@@ -56,8 +57,8 @@ class Server {
 
             socket.on("disconnect", () => {
                 delete this.players[socket.player.id];
-		// Tell other players that this player died
-		socket.player.lives = 0;
+		        // Tell other players that this player died
+		        socket.player.lives = 0;
                 this.updatePlayer(socket, socket.player);
             });
 
@@ -78,8 +79,6 @@ class Server {
         socket.emit("updateplayer", player);
         socket.broadcast.emit("updateplayer", player);
     }
-
-
 }
 
 let main = () => {
