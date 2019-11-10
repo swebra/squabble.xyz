@@ -61,7 +61,7 @@ class Server {
             socket.on("disconnect", () => {
                 console.log("user disconnected");
                 delete this.players[socket.player.id];
-                this.updatePlayers(socket);
+                this.updatePlayer(socket);
             });
 
             /*  TX EVENTS  */
