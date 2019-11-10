@@ -62,8 +62,6 @@ class Client {
 	    this.game.otherPlayers.getChildren().forEach((player) => {
 		if (player.id === data.id) {
 		    // move and re-render enemy sprite
-		    console.log("update enemy sprite");
-		    console.log("x: " + data.posX + "y: " + data.posY);
 		    player.setPosition(data.posX, data.posY);
 
 		    // check if enemy got killed
@@ -76,7 +74,6 @@ class Client {
         });
 
         this.socket.on("newplayer", (data) => {
-	    console.log("newplayer");
             this.players.push(data);
 	    // create sprite for enemy
 	    const enemySprite = this.game.add.sprite(data.posX, data.posY,

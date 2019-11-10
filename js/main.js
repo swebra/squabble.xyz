@@ -27,7 +27,6 @@ let client = new Client();
 
 function main() {
     client.receiveId().then(() => {
-        console.log(client.player.id);
         game = new Phaser.Game(config);
 	// TODO refactor this
 	//game.addEnemy = addEnemy;
@@ -145,11 +144,5 @@ function addEnemy(game, enemy) {
     enemySprite.id = enemy.id;
     game.otherPlayers.add(enemySprite);
 };
-
-function renderEnemy(client) {
-    client.players.forEach((enemy) => {
-        console.log(enemy);
-    });
-}
 
 main();
