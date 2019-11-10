@@ -53,9 +53,12 @@ function create () {
     createLevel(this);
 
     // create player
-    this.gPlayer = this.physics.add.sprite(100, 950, 'block');
-    this.gPlayer.body.setGravityY(400);
-    this.gPlayer.setCollideWorldBounds(true);
+    this.playerSize = 50; // In px
+    const playerRect = this.add.rectangle(100, 200, this.playerSize,
+                                          this.playerSize, this.client.player.color);
+    this.gPlayer = this.physics.add.existing(playerRect);
+    this.gPlayer.body.setGravityY(500);
+    this.gPlayer.body.setCollideWorldBounds(true);
 
     // add collision listener for player and platforms
     this.physics.add.collider(this.gPlayer, this.platforms);
@@ -108,24 +111,24 @@ function update () {
     // gplayer movement
     if (cursors.left.isDown) {
 	// left
-        this.gPlayer.setVelocityX(-500);
+        this.gPlayer.body.setVelocityX(-500);
     }
     else if (cursors.right.isDown) {
     // right
-        this.gPlayer.setVelocityX(500);
+        this.gPlayer.body.setVelocityX(500);
     }
     else if (cursors.down.isDown && !this.gPlayer.body.touching.down) {
     // groundpound
-        this.gPlayer.setVelocityY(1000);
-        this.gPlayer.setVelocityX(0);
+        this.gPlayer.body.setVelocityY(1000);
+        this.gPlayer.body.setVelocityX(0);
     }
     else {
     // not moving
-        this.gPlayer.setVelocityX(0);
+        this.gPlayer.body.setVelocityX(0);
     }
     if (cursors.up.isDown && this.gPlayer.body.touching.down) {
     // jumping
-        this.gPlayer.setVelocityY(-600);
+        this.gPlayer.body.setVelocityY(-600);
     }
 
 
@@ -138,31 +141,31 @@ function update () {
 }
 
 function addEnemy(game, enemy) {
-    // create sprite for enemy
-    const enemySprite = game.add.sprite(enemy.posX, enemy.posY,
-					"block");
-    enemySprite.setTint(0xff0000);
-    game.physics.add.collider(enemySprite, game.platforms);
+    // create rectangle for enemy
+    const enemyRect = game.add.rectangle(enemy.posX, enemy.posY, game.playerSize,
+                                         game.playerSize, enemy.color);
+    game.physics.add.collider(enemyRect, game.platforms);
+    enemyRect.killable = true;
+    game.physics.add.collider(enemyRect, game.platforms);
 
-    // add an "id" field to the sprite object so that we can tell which player
+    // add an "id" field to the rectangle object so that we can tell which player
     // it is later when we update positions
-    enemySprite.id = enemy.id;
-    game.otherPlayers.add(enemySprite);
+    enemyRect.id = enemy.id;
+    game.otherPlayers.add(enemyRect);
 
     // add killing ability collider
     game.physics.add.overlap(game.gPlayer, game.otherPlayers, playerKill, null, game);
 };
 
-// guard for de-bouncing
-let readyToKill = true;
 function playerKill(gPlayer, otherPlayer) {
-    if (readyToKill && gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
+    // TODO: May need to be modified with new rectangle change
+    if (otherPlayer.killable && gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
 	console.log("kill");
-	readyToKill = false;
+	otherPlayer.killable = false;
 	// 1 second delay before you can kill again
-	setTimeout(() => { console.log("ready"); readyToKill = true; }, 1000);
+	setTimeout(() => { console.log("ready"); otherPlayer.killable = true; }, 1000);
 	console.log("Player Collision");
-	gPlayer.setVelocityY(0);
+	gPlayer.body.setVelocityY(0);
 	// otherPlayer.disableBody(true, true);
 	// do 1 damage
 	client.killPlayer(otherPlayer.id, 1);

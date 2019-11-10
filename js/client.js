@@ -75,16 +75,7 @@ class Client {
 
         this.socket.on("newplayer", (data) => {
             this.players.push(data);
-	    // create sprite for enemy
-	    const enemySprite = this.game.add.sprite(data.posX, data.posY,
-						     "block");
-	    enemySprite.setTint(0xff0000);
-	    this.game.physics.add.collider(enemySprite, this.game.platforms);
-
-	    // add an "id" field to the sprite object so that we can tell which
-	    // player it is later when we update positions
-	    enemySprite.id = data.id;
-	    this.game.otherPlayers.add(enemySprite);
+	    addEnemy(this.game, data);
         });
     }
 }
