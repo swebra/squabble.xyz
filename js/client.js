@@ -6,15 +6,16 @@ class Client {
     constructor() {
         this.socket = io.connect();
         this.player = null;
+        this.players = [];
     }
 
 
-    // RX EVENT - newplayer
+    // TX EVENT - newplayer
     askNewPlayer(player) {
         this.socket.emit("newplayer");
     };
     
-    // RX EVENT - playerupdate
+    // TX EVENT - playerupdate
     playerUpdate(player) {
         this.socket.emit("playerupdate", this.player);
     }
@@ -24,6 +25,7 @@ class Client {
             this.socket.on('connect', () => {
                 this.askNewPlayer();
                 console.log('Successfully connected!');
+                // RX EVENT - yourid
                 this.socket.on("yourid", (data) => {
                     console.log(data);
                     this.player = new Player(data);
@@ -38,10 +40,8 @@ class Client {
     setupEvents() {
         // RX EVENTS
 
-        this.socket.on("recieveplayers", (data) => {
-
-            console.log("recieving players");
-            console.log(data);
+        this.socket.on("updateplayers", (data) => {
+            this.players = data;
         });
     }
 }

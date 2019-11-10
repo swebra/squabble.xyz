@@ -13,7 +13,6 @@ class Server {
         this.app.use('/js', this.express.static(__dirname + '/js'));
         this.app.use('/node_modules', this.express.static(__dirname + '/node_modules'));
         this.app.use('/assets', this.express.static(__dirname + '/assets'));
-
         this.app.get('/', (req, res) => {
             res.sendFile(__dirname+'/index.html');
         });
@@ -22,7 +21,7 @@ class Server {
             console.log('Listening on ' + this.server.address().port);
         });
         this.lastPlayerID = 0;
-        this.players = [];
+        this.players = {};
         this.setupEvents();
     }
 
@@ -35,19 +34,31 @@ class Server {
                 // object
                 socket.player = new Player(this.lastPlayerID++);
                 // update the total list of players
-                this.players.push(socket.player);
+                this.players[socket.player.id] = socket.player;
                 // send the client their ID
-                socket.emit("yourid", socket.player.id);
-                // Tell the new player about the other players
-                socket.emit("allplayers", this.players);
-                // Tells existing players that there is a new player
-                socket.broadcast.emit("newplayer", socket.player);
+                socket.emit("yourid", socket.player.id); // TX
+
+                this.updatePlayers(socket);
+
                 console.log(this.players);
             });
 
             /*  TX EVENTS  */
+            socket.on("playerupdate", (data) => {
+                // data is an updated player object
+                this.players[data.id] = data;
+                console.log(this.players[data.id])
+                this.updatePlayers(socket);
+            });
 
         });
+    }
+
+    updatePlayers(socket) {
+        // send array of players to current socket
+        socket.emit("updateplayers", Object.values(this.players));
+        // send to all sockets except current socket
+        socket.broadcast.emit("updateplayers", Object.values(this.players));
     }
 }
 
