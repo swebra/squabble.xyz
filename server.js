@@ -49,7 +49,6 @@ class Server {
                 console.log(data);
 		if (!(data.id in this.players)) {
 		    // player was probably already killed and deleted
-		    console.log("boo");
 		    return;
 		}
                 this.players[data.id].lives -= data.damage;
