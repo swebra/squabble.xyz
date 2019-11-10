@@ -53,9 +53,7 @@ class Client {
             this.player.lives = data.lives;
             if (this.player.lives <= 0) {
                 // I got killed
-                alert("I'm Dead. It was nice meeting you. Don't give up.");
                 location.reload();
-                // TODO prompt user to refresh
             }
         }
 
