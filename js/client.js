@@ -51,26 +51,26 @@ class Client {
 
 	    // update my own lives
 	    if (this.player.id === data.id) {
-		this.player.lives = data.lives;
-		if (this.player.lives <= 0) {
-		    // I got killed
-                    alert("I'm Dead. It was nice meeting you. Don't give up.")
-		    // TODO prompt user to refresh
-		}
+            this.player.lives = data.lives;
+            if (this.player.lives <= 0) {
+                // I got killed
+                        alert("I'm Dead. It was nice meeting you. Don't give up.")
+                // TODO prompt user to refresh
+            }
 	    }
 
 	    this.game.otherPlayers.getChildren().forEach((player) => {
-		if (player.id === data.id) {
-		    // move and re-render enemy sprite
-		    player.setPosition(data.posX, data.posY);
+                if (player.id === data.id) {
+                    // move and re-render enemy sprite
+                    player.setPosition(data.posX, data.posY);
 
-		    // check if enemy got killed
-		    if (data.lives <= 0) {
-			// delete enemy sprite
-			//this.game.otherPlayers.remove(player, true);
-		    }
-		}
-	    });
+                    // check if enemy got killed
+                    if (data.lives <= 0) {
+                    // delete enemy sprite
+                    //this.game.otherPlayers.remove(player, true);
+                    }
+                }
+            });
         });
 
         this.socket.on("newplayer", (data) => {
