@@ -143,7 +143,7 @@ function update () {
     }
     if (cursors.up.isDown && this.gPlayer.body.touching.down) {
     // jumping
-        this.gPlayer.body.setVelocityY(-400 - 100*score);
+        this.gPlayer.body.setVelocityY(Math.max(-600 - 200*score, -1000));
     }
 
         // emit player movement
