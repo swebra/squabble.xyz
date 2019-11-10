@@ -31,9 +31,9 @@ class Client {
                 });
 
                 this.socket.on("currentplayers", (data) => {
-		    // Just store the list of current players for later. This
-		    // will be used after the game object has been initialized.
-		    this.tmpPlayers = data;
+            // Just store the list of current players for later. This
+            // will be used after the game object has been initialized.
+            this.tmpPlayers = data;
                     resolve();
                 });
             });
@@ -46,10 +46,10 @@ class Client {
         // RX EVENTS
 
         this.socket.on("updateplayer", (data) => {
-	    // data is an updated player object
+        // data is an updated player object
 
-	    // update my own lives
-	    if (this.player.id === data.id) {
+        // update my own lives
+        if (this.player.id === data.id) {
             this.player.lives = data.lives;
             if (this.player.lives <= 0) {
                 // I got killed
@@ -57,9 +57,9 @@ class Client {
                 location.reload();
                 // TODO prompt user to refresh
             }
-	    }
+        }
 
-	    this.game.otherPlayers.getChildren().forEach((player) => {
+        this.game.otherPlayers.getChildren().forEach((player) => {
                 if (player.id === data.id) {
                     // move and re-render enemy sprite
                     player.setPosition(data.posX, data.posY);
@@ -74,7 +74,7 @@ class Client {
         });
 
         this.socket.on("newplayer", (data) => {
-	    addEnemy(this.game, data);
+        addEnemy(this.game, data);
         });
     }
 }
