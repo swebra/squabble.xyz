@@ -128,8 +128,6 @@ function update () {
     this.client.player.posX = this.gPlayer.x;
     this.client.player.posY = this.gPlayer.y;
     this.client.playerUpdate();
-
-    renderEnemy(this.client);
 }
 
 function addEnemy(game, enemy) {
