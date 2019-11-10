@@ -19,6 +19,10 @@ class Client {
     playerUpdate(player) {
         this.socket.emit("playerupdate", this.player);
     }
+
+    killPlayer(id, damage) {
+        this.socket.emit("killplayer",{"id": id, "damage": damage});
+    }
     
     receiveId() {
         return new Promise((resolve, reject) => {
@@ -37,11 +41,22 @@ class Client {
         });
     }
 
+
+
     setupEvents() {
         // RX EVENTS
 
         this.socket.on("updateplayers", (data) => {
             this.players = data;
+            for(let i = 0; i < data.length; ++i) {
+                if (data[i].id === this.player.id) {
+                    if(data[i].id <= 0) {
+                        alert("I'm Dead. It was nice meeting you. Don't give up.")
+                    }
+                    this.player.lives = data[i].lives;
+
+                }
+            }
         });
     }
 }

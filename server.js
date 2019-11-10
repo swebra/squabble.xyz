@@ -43,6 +43,21 @@ class Server {
                 console.log(this.players);
             });
 
+            socket.on("killplayer",(data) => {
+                this.players[data.id].lives -= data.damage;
+                this.updatePlayers(socket);
+                if(this.players[data.id].lives <= 0) {
+                    delete this.players[data.id];
+                }
+                //Don't update here for performance reasons. Rely on other updatePlayer calls.
+            });
+
+            socket.on("disconnect", () => {
+                console.log("user disconnected");
+                delete this.players[socket.player.id];
+                this.updatePlayers(socket);
+            });
+
             /*  TX EVENTS  */
             socket.on("playerupdate", (data) => {
                 // data is an updated player object
@@ -60,6 +75,8 @@ class Server {
         // send to all sockets except current socket
         socket.broadcast.emit("updateplayers", Object.values(this.players));
     }
+
+
 }
 
 let main = () => {
