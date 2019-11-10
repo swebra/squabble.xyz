@@ -41,16 +41,25 @@ function preload () {
 }
 
 
-// setting global text variables
+// setting global variables
 let score = 0;
 let scoreText;
 let livesText;
+// set physics boundaries
+let levelWidth = 2000;
+let levelHeight = 2000;
 
 function create () {
 
     // set score and lives
     scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText.setScrollFactor(0);
     livesText = this.add.text(300, 16, 'Lives: 0', { fontSize: '32px', fill: '#000' });
+    livesText.setScrollFactor(0);
+
+    // set the boundaries of our game world
+    this.physics.world.bounds.width = levelWidth;
+    this.physics.world.bounds.height = levelHeight;
 
     // create other players and set collision stuff
     this.otherPlayers = this.physics.add.group();
@@ -63,10 +72,10 @@ function create () {
 
     // create player
     this.playerSize = 50; // In px
-    const playerRect = this.add.rectangle(100, 200, this.playerSize,
+    const playerRect = this.add.rectangle(Math.floor(Math.random()*levelWidth), levelHeight - 50, this.playerSize,
                                           this.playerSize, this.client.player.color);
     this.gPlayer = this.physics.add.existing(playerRect);
-    this.gPlayer.body.setGravityY(500);
+    this.gPlayer.body.setGravityY(1000);
     this.gPlayer.body.setCollideWorldBounds(true);
 
     // add collision listener for player and platforms
@@ -86,17 +95,9 @@ function create () {
     // setup keyboard collection object
     cursors = this.input.keyboard.createCursorKeys();
 
-    // set physics boundaries
-    var globalLevelWidth = 2000;
-    var globalLevelHeight = 1000;
-
-    // set the boundaries of our game world
-    this.physics.world.bounds.width = globalLevelWidth;
-    this.physics.world.bounds.height = globalLevelHeight;
-
     // set camera properties              roundpx, lerpx, lerpy
     this.cameras.main.startFollow(this.gPlayer, true, 0.1, 0.1);
-    this.cameras.main.setBounds(0, 0, globalLevelWidth, globalLevelHeight);
+    this.cameras.main.setBounds(0, 0, levelWidth, levelHeight);
     this.cameras.main.setDeadzone(50, 50);
     this.cameras.main.setBackgroundColor('#ccccff');
 }
@@ -106,13 +107,15 @@ function createLevel(game) {
     let platformColor = 0x6666ff;
     game.platforms = game.physics.add.staticGroup();
     // ground
-    game.platforms.add(game.add.rectangle(1000, 990, 2000, 20, platformColor));
-    for (let i = 0; i < 10; i++) {
+    game.platforms.add(game.add.rectangle(1000, levelHeight-10, 2000, 20, platformColor));
+    for (let i = 0; i < 5; i++) {
         // add platforms                       x    y    w   h
-        game.platforms.add(game.add.rectangle(400*i+100, 800, 200, 30, platformColor));
-        game.platforms.add(game.add.rectangle(400*i+300, 600, 200, 30, platformColor));
-        game.platforms.add(game.add.rectangle(400*i+100, 400, 200, 30, platformColor));
-        game.platforms.add(game.add.rectangle(400*i+300, 200, 200, 30, platformColor));
+        for (let j = 0; j < 4; j++) {
+            let px = 400*i + 100 + Math.floor(Math.random()*200);
+            let py = levelHeight - 250 - 200*j;
+            let pw = Math.floor(Math.random(300)*100 + 150);
+            game.platforms.add(game.add.rectangle(px, py,pw , 30, platformColor));
+        }
     }
 }
 
@@ -142,8 +145,6 @@ function update () {
     // jumping
         this.gPlayer.body.setVelocityY(-300 * this.client.player.lives);
     }
-
-
 
         // emit player movement
     var x = this.gPlayer.x;
