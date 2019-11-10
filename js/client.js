@@ -1,5 +1,7 @@
 /*  CLIENT  */
 
+console.log("New server...")
+
 class Client {
     constructor() {
         this.socket = io.connect();
@@ -7,10 +9,12 @@ class Client {
     }
 
 
+    // RX EVENT - newplayer
     askNewPlayer(player) {
         this.socket.emit("newplayer");
     };
     
+    // RX EVENT - playerupdate
     playerUpdate(player) {
         this.socket.emit("playerupdate", this.player);
     }
@@ -32,8 +36,12 @@ class Client {
     }
 
     setupEvents() {
+        // RX EVENTS
+
         this.socket.on("recieveplayers", (data) => {
+
             console.log("recieving players");
+            console.log(data);
         });
     }
 }

@@ -1,6 +1,6 @@
-console.log("Creating new phaser game...");
-
 /*  GAME    */
+
+console.log("Creating new phaser game...");
 
 let config = {
     type: Phaser.AUTO,
@@ -26,8 +26,7 @@ function main() {
     });
 }
 
-function preload ()
-{
+function preload () {
     this.client = client;
 }
 
