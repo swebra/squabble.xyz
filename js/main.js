@@ -38,6 +38,8 @@ function main() {
 }
 
 function preload () {
+    console.log("preload");
+    this.load.audio("slap", ["assets/audio/squabble.wav"]);
 }
 
 
@@ -49,7 +51,14 @@ let livesText;
 let levelWidth = 2000;
 let levelHeight = 2000;
 
+let music;
+
 function create () {
+    console.log("create");
+
+    music = this.sound.add("slap");
+    music.play();
+    console.log("after play");
 
     // set score and lives
     scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
