@@ -147,11 +147,13 @@ function addEnemy(game, enemy) {
 };
 
 function playerKill(gPlayer, otherPlayer) {
-  if (gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
-      console.log("Player Collision");
-      gPlayer.setVelocityY(0);
-      // otherPlayer.disableBody(true, true);
-  }
+    if (gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
+	console.log("Player Collision");
+	gPlayer.setVelocityY(0);
+	// otherPlayer.disableBody(true, true);
+    }
+    // do 1 damage
+    client.killPlayer(otherPlayer.id, 1);
 }
 
 main();
