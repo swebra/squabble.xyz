@@ -66,7 +66,7 @@ class Client {
                     // check if enemy got killed
                     if (data.lives <= 0) {
                     // delete enemy sprite
-                    //this.game.otherPlayers.remove(player, true);
+                    this.game.otherPlayers.remove(player, true);
                     }
                 }
             });
