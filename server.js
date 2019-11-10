@@ -1,5 +1,7 @@
 /*  SERVER  */
 
+const Player = require("./js/player")
+
 class Server {
 
     constructor() {
@@ -24,15 +26,6 @@ class Server {
         this.setupEvents();
     }
 
-    getAllPlayers() {
-        // Go through all open sockets and get the "player" object
-        Object.keys(io.sockets.connected).forEach((socketID) => {
-            let player = io.sockets.connected[socketID].player;
-            if (player) this.players.push(player);
-        });
-        return this.players;
-    }
-
     /*  EVENTS  */
     setupEvents() {
         this.io.on("connection", (socket) => {
@@ -40,16 +33,15 @@ class Server {
             socket.on("newplayer", () => {
                 // Create a new "player" object and assign it to the new socket
                 // object
-                socket.player = {
-                    id: lastPlayerID++,
-                };
+                socket.player = new Player(this.lastPlayerID++);
+                this.players.push(socket.player);
                 socket.emit("yourid", socket.id);
                 // Tell the new player about the other players
     
-                socket.emit("allplayers", getAllPlayers());
+                socket.emit("allplayers", this.players);
                 // Tells existing players that there is a new player
                 socket.broadcast.emit("newplayer", socket.player);
-                console.log(getAllPlayers());
+                console.log(this.players);
             });
 
             /*  TX EVENTS  */

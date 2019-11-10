@@ -9,3 +9,5 @@ class Player {
         this.lives = 3;
     }
 }
+
+module.exports = Player;
