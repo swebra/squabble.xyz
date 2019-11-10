@@ -47,6 +47,11 @@ class Server {
 
             socket.on("killplayer",(data) => {
                 console.log(data);
+		if (!(data.id in this.players)) {
+		    // player was probably already killed and deleted
+		    console.log("boo");
+		    return;
+		}
                 this.players[data.id].lives -= data.damage;
                 this.updatePlayer(socket, this.players[data.id]);
                 if(this.players[data.id].lives <= 0) {
