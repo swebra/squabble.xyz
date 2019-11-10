@@ -146,8 +146,14 @@ function addEnemy(game, enemy) {
     game.physics.add.overlap(game.gPlayer, game.otherPlayers, playerKill, null, game);
 };
 
+// guard for de-bouncing
+let readyToKill = true;
 function playerKill(gPlayer, otherPlayer) {
-    if (gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
+    if (readyToKill && gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
+	console.log("kill");
+	readyToKill = false;
+	// 1 second delay before you can kill again
+	setTimeout(() => { console.log("ready"); readyToKill = true; }, 1000);
 	console.log("Player Collision");
 	gPlayer.setVelocityY(0);
 	// otherPlayer.disableBody(true, true);
