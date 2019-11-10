@@ -36,6 +36,10 @@ class Client {
                     this.player = new Player(data);
                     console.log("about to resolve");
                     this.setupEvents();
+                });
+
+                this.socket.on("currentplayers", (data) => {
+                    this.players = data;
                     resolve();
                 });
             });
@@ -47,17 +51,33 @@ class Client {
     setupEvents() {
         // RX EVENTS
 
-        this.socket.on("updateplayers", (data) => {
-            this.players = data;
-            for(let i = 0; i < data.length; ++i) {
-                if (data[i].id === this.player.id) {
-                    if(data[i].id <= 0) {
-                        alert("I'm Dead. It was nice meeting you. Don't give up.")
-                    }
-                    this.player.lives = data[i].lives;
+        this.socket.on("updateplayer", (data) => {
+	    // data is an updated player object
 
+	    // update my own lives
+	    if (this.player.id === data.id) {
+		this.player.lives = data.lives;
+	    }
+            for(let i = 0; i < this.players.length; ++i) {
+                if (data.id === this.players[i].id) {
+		    this.players[i] = data;
+		    // check if a player got killed
+		    if (data.lives <= 0) {
+			if (this.players[i].id === this.player.id) {
+			    // I got killed
+                            alert("I'm Dead. It was nice meeting you. Don't give up.")
+			} else {
+			    // Someone else got killed
+			    delete this.players[i];
+			}
+		    }
                 }
             }
+        });
+
+        this.socket.on("newplayer", (data) => {
+	    console.log("got new player");
+            this.players.push(data);
         });
     }
 }
