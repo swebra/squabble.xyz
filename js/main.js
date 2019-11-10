@@ -29,11 +29,11 @@ let client = new Client();
 function main() {
     client.receiveId().then(() => {
         game = new Phaser.Game(config);
-	// TODO refactor this
-	//game.addEnemy = addEnemy;
+    // TODO refactor this
+    //game.addEnemy = addEnemy;
 
-	// give client a reference to game
-	//client.game = game;
+    // give client a reference to game
+    //client.game = game;
     });
 }
 
@@ -64,9 +64,9 @@ function create () {
     // create other players and set collision stuff
     this.otherPlayers = this.physics.add.group();
     this.client.tmpPlayers.forEach((player) => {
-	if (this.client.player.id != player.id) {
-	    addEnemy(this, player);
-	}
+    if (this.client.player.id != player.id) {
+        addEnemy(this, player);
+    }
     });
     // idk why this need to be here
     this.client.game = this;
@@ -108,7 +108,7 @@ function createLevel(game) {
 function update () {
     // gplayer movement
     if (cursors.left.isDown) {
-	// left
+    // left
         this.gPlayer.body.setVelocityX(-500);
     }
     else if (cursors.right.isDown) {
@@ -158,15 +158,15 @@ function addEnemy(game, enemy) {
 function playerKill(gPlayer, otherPlayer) {
     // TODO: May need to be modified with new rectangle change
     if (otherPlayer.killable && gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
-	console.log("kill");
-	otherPlayer.killable = false;
-	// 1 second delay before you can kill again
-	setTimeout(() => { console.log("ready"); otherPlayer.killable = true; }, 1000);
-	console.log("Player Collision");
-	gPlayer.body.setVelocityY(0);
-	// otherPlayer.disableBody(true, true);
-	// do 1 damage
-	client.killPlayer(otherPlayer.id, 1);
+    console.log("kill");
+    otherPlayer.killable = false;
+    // 1 second delay before you can kill again
+    setTimeout(() => { console.log("ready"); otherPlayer.killable = true; }, 1000);
+    console.log("Player Collision");
+    gPlayer.body.setVelocityY(0);
+    // otherPlayer.disableBody(true, true);
+    // do 1 damage
+    client.killPlayer(otherPlayer.id, 1);
     }
 }
 

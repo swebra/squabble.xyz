@@ -47,10 +47,10 @@ class Server {
 
             socket.on("killplayer",(data) => {
                 console.log(data);
-		if (!(data.id in this.players)) {
-		    // player was probably already killed and deleted
-		    return;
-		}
+        if (!(data.id in this.players)) {
+            // player was probably already killed and deleted
+            return;
+        }
                 this.players[data.id].lives -= data.damage;
                 this.updatePlayer(socket, this.players[data.id]);
                 if(this.players[data.id].lives <= 0) {
@@ -61,21 +61,21 @@ class Server {
 
             socket.on("disconnect", () => {
                 delete this.players[socket.player.id];
-		        // Tell other players that this player died
-		        socket.player.lives = 0;
+                // Tell other players that this player died
+                socket.player.lives = 0;
                 this.updatePlayer(socket, socket.player);
             });
 
             /*  TX EVENTS  */
             socket.on("playerupdate", (data) => {
                 // data is an updated player object
-		if (!(data.id in this.players)) {
-		    // return early if player has been deleted or something
-		    // weird happened
-		    return;
-		}
+        if (!(data.id in this.players)) {
+            // return early if player has been deleted or something
+            // weird happened
+            return;
+        }
                 this.players[data.id].posX = data.posX;
-		this.players[data.id].posY = data.posY;
+        this.players[data.id].posY = data.posY;
                 this.updatePlayer(socket, this.players[data.id]);
             });
 
