@@ -1,7 +1,5 @@
 /*  GAME    */
 
-console.log("Creating new phaser game...");
-
 let config = {
     parent: document.getElementById("game"),
     scale: { mode: Phaser.Scale.RESIZE },
@@ -25,23 +23,30 @@ let config = {
 };
 
 let client = new Client();
+//let game;
 
 function main() {
-    let game;
     client.receiveId().then(() => {
-        console.log("resolved");
         console.log(client.player.id);
         game = new Phaser.Game(config);
+	// TODO refactor this
+	//game.addEnemy = addEnemy;
+
+	// give client a reference to game
+	//client.game = game;
     });
 }
 
 function preload () {
-    this.client = client;
     this.load.image('ground', 'assets/platform.png');
     this.load.image('block', 'assets/block.png');
 }
 
 function create () {
+    // create other players and set collision stuff
+    this.otherPlayers = this.physics.add.group();
+
+    this.client = client;
     // create static group for platforms
     this.platforms = this.physics.add.staticGroup();
 
@@ -66,11 +71,14 @@ function create () {
 
     // create other players and set collision stuff
     this.otherPlayers = this.physics.add.group();
-    this.client.players.forEach((player) => {
-	if (player.id != this.client.player.id) {
-	    addEnemy(player, this);
+    this.client.currentPlayers.forEach((player) => {
+	if (this.client.player.id != player.id) {
+	    addEnemy(this, player);
 	}
     });
+    // idk why this need to be here
+    this.client.game = this;
+    this.client.setupEvents();
 
     // setup keyboard collection object
     cursors = this.input.keyboard.createCursorKeys();
@@ -125,10 +133,10 @@ function update () {
     renderEnemy(this.client);
 }
 
-function addEnemy(enemy, game) {
+function addEnemy(game, enemy) {
     // create sprite for enemy
-    const enemySprite = game.physics.add.sprite(enemy.posX, enemy.posY,
-						"block");
+    const enemySprite = game.add.sprite(enemy.posX, enemy.posY,
+					"block");
     enemySprite.setTint(0xff0000);
     game.physics.add.collider(enemySprite, game.platforms);
 
@@ -136,7 +144,7 @@ function addEnemy(enemy, game) {
     // it is later when we update positions
     enemySprite.id = enemy.id;
     game.otherPlayers.add(enemySprite);
-}
+};
 
 function renderEnemy(client) {
     client.players.forEach((enemy) => {
