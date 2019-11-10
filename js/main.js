@@ -117,6 +117,9 @@ function createLevel(game) {
 }
 
 function update () {
+    // update lives text
+    livesText.setText("Lives: " + this.client.player.lives);
+
     // gplayer movement
     if (cursors.left.isDown) {
     // left
@@ -141,15 +144,23 @@ function update () {
     }
 
 
-    // // update server game state
-    this.client.player.velX = this.gPlayer.body.velocity.x;
-    this.client.player.velY = this.gPlayer.body.velocity.y;
-    this.client.player.posX = this.gPlayer.x;
-    this.client.player.posY = this.gPlayer.y;
-    this.client.playerUpdate();
 
-    // update lives text
-    livesText.setText("Lives: " + this.client.player.lives);
+        // emit player movement
+    var x = this.gPlayer.x;
+    var y = this.gPlayer.y;
+    // check if position changed and only update if different
+    if (this.gPlayer.oldPosition && (x !== this.gPlayer.oldPosition.x || y !== this.gPlayer.oldPosition.y)) {
+        // // update server game state
+        this.client.player.posX = this.gPlayer.x;
+        this.client.player.posY = this.gPlayer.y;
+        this.client.playerUpdate();
+    }
+    // save old position data
+    this.gPlayer.oldPosition = {
+      x: this.gPlayer.x,
+      y: this.gPlayer.y,
+    };
+
 }
 
 function addEnemy(game, enemy) {
