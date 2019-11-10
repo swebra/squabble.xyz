@@ -24,7 +24,6 @@ let config = {
 };
 
 let client = new Client();
-//let game;
 
 function main() {
     client.receiveId().then(() => {
@@ -40,7 +39,18 @@ function main() {
 function preload () {
 }
 
+// setting global text variables
+let score = 0;
+let scoreText;
+let livesText;
+
+
 function create () {
+
+    // set score and lives
+    scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
+    livesText = this.add.text(300, 16, 'Lives: 0', { fontSize: '32px', fill: '#000' });
+
     // create other players and set collision stuff
     this.otherPlayers = this.physics.add.group();
 
@@ -130,12 +140,15 @@ function update () {
     }
 
 
-    // // update server game state
+    // update server game state
     this.client.player.velX = this.gPlayer.body.velocity.x;
     this.client.player.velY = this.gPlayer.body.velocity.y;
     this.client.player.posX = this.gPlayer.x;
     this.client.player.posY = this.gPlayer.y;
     this.client.playerUpdate();
+
+    // update lives text
+    livesText.setText("Lives: " + this.client.player.lives);
 }
 
 function addEnemy(game, enemy) {
@@ -158,15 +171,17 @@ function addEnemy(game, enemy) {
 function playerKill(gPlayer, otherPlayer) {
     // TODO: May need to be modified with new rectangle change
     if (otherPlayer.killable && gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
-	console.log("kill");
-	otherPlayer.killable = false;
-	// 1 second delay before you can kill again
-	setTimeout(() => { console.log("ready"); otherPlayer.killable = true; }, 1000);
-	console.log("Player Collision");
-	gPlayer.body.setVelocityY(0);
-	// otherPlayer.disableBody(true, true);
-	// do 1 damage
-	client.killPlayer(otherPlayer.id, 1);
+        score++;
+        scoreText.setText("Score: " + score);
+    	console.log("kill");
+    	otherPlayer.killable = false;
+    	// 1 second delay before you can kill again
+    	setTimeout(() => { console.log("ready"); otherPlayer.killable = true; }, 1000);
+    	console.log("Player Collision");
+    	gPlayer.body.setVelocityY(0);
+    	// otherPlayer.disableBody(true, true);
+    	// do 1 damage
+    	client.killPlayer(otherPlayer.id, 1);
     }
 }
 
