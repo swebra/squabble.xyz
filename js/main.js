@@ -38,8 +38,6 @@ function main() {
 }
 
 function preload () {
-    this.load.image('ground', 'assets/platform.png');
-    this.load.image('block', 'assets/block.png');
 }
 
 function create () {
