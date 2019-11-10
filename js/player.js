@@ -4,8 +4,6 @@ class Player {
         this.id = ID;
         this.posX = 0;
         this.posY = 0;
-        this.velX = 0; // FIXME: Still needed?
-        this.velY = 0; // FIXME: Still needed?
         this.lives = 3;
         // Randomly assign color from the colorList
         let colorList = [0xb8312f, 0xd04740, 0xe14937, 0xeb6a56, 0xf37934,
