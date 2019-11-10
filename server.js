@@ -69,8 +69,14 @@ class Server {
             /*  TX EVENTS  */
             socket.on("playerupdate", (data) => {
                 // data is an updated player object
-                this.players[data.id] = data;
-                this.updatePlayer(socket, data);
+		if (!(data.id in this.players)) {
+		    // return early if player has been deleted or something
+		    // weird happened
+		    return;
+		}
+                this.players[data.id].posX = data.posX;
+		this.players[data.id].posY = data.posY;
+                this.updatePlayer(socket, this.players[data.id]);
             });
 
         });
