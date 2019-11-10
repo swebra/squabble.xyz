@@ -151,9 +151,9 @@ function playerKill(gPlayer, otherPlayer) {
 	console.log("Player Collision");
 	gPlayer.setVelocityY(0);
 	// otherPlayer.disableBody(true, true);
+	// do 1 damage
+	client.killPlayer(otherPlayer.id, 1);
     }
-    // do 1 damage
-    client.killPlayer(otherPlayer.id, 1);
 }
 
 main();
