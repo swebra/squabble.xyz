@@ -36,7 +36,7 @@ class Server {
                 // update the total list of players
                 this.players[socket.player.id] = socket.player;
                 // send the client their ID
-                socket.emit("yourid", socket.player.id); // TX
+                socket.emit("yourplayer", socket.player); // TX
 
                 // send current players to the new player
                 socket.emit("currentplayers", Object.values(this.players));

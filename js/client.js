@@ -10,7 +10,7 @@ class Client {
     askNewPlayer(player) {
         this.socket.emit("newplayer");
     };
-    
+
     // TX EVENT - playerupdate
     playerUpdate(player) {
         this.socket.emit("playerupdate", this.player);
@@ -20,14 +20,14 @@ class Client {
         // This has not been tested!
         this.socket.emit("killplayer", {"id": id, "damage": damage});
     }
-    
+
     receiveId() {
         return new Promise((resolve, reject) => {
             this.socket.on('connect', () => {
                 this.askNewPlayer();
                 // RX EVENT - yourid
-                this.socket.on("yourid", (data) => {
-                    this.player = new Player(data);
+                this.socket.on("yourplayer", (data) => {
+                    this.player = data;
                 });
 
                 this.socket.on("currentplayers", (data) => {
