@@ -34,12 +34,8 @@ function create () {
 }
 
 function update () {
-    console.log("UPDATE")
-    // console.log(this);
-    if (this.client.player === null) {
-        console.log("it is null")
-    }
-    console.log(this.client);
+
+    // Get keyboard input
     cursors = this.input.keyboard.createCursorKeys();
     if (cursors.left.isDown) {
         console.log("Left");
@@ -55,6 +51,8 @@ function update () {
         //console.log("nothing");
         this.client.player.velX = 0;
     }
+
+    // update server game state
     this.client.playerUpdate();
 }
 
