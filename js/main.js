@@ -99,12 +99,12 @@ function create () {
     this.cameras.main.startFollow(this.gPlayer, true, 0.1, 0.1);
     this.cameras.main.setBounds(0, 0, levelWidth, levelHeight);
     this.cameras.main.setDeadzone(50, 50);
-    this.cameras.main.setBackgroundColor('#ccccff');
+    this.cameras.main.setBackgroundColor('#E3E3E3');
 }
 
 // function to create platforms
 function createLevel(game) {
-    let platformColor = 0x6666ff;
+    let platformColor = 0x464646;
     game.platforms = game.physics.add.staticGroup();
     // ground
     game.platforms.add(game.add.rectangle(1000, levelHeight-10, 2000, 20, platformColor));
