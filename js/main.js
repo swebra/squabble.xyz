@@ -138,6 +138,8 @@ function addEnemy(game, enemy) {
     const enemyRect = game.add.rectangle(enemy.posX, enemy.posY, game.playerSize,
                                          game.playerSize, enemy.color);
     game.physics.add.collider(enemyRect, game.platforms);
+    enemyRect.killable = true;
+    game.physics.add.collider(enemyRect, game.platforms);
 
     // add an "id" field to the rectangle object so that we can tell which player
     // it is later when we update positions
@@ -148,15 +150,13 @@ function addEnemy(game, enemy) {
     game.physics.add.overlap(game.gPlayer, game.otherPlayers, playerKill, null, game);
 };
 
-// guard for de-bouncing
-let readyToKill = true;
 function playerKill(gPlayer, otherPlayer) {
-    // TODO: May need to be modified with rectangles
-    if (readyToKill && gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
+    // TODO: May need to be modified with new rectangle change
+    if (otherPlayer.killable && gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
 	console.log("kill");
-	readyToKill = false;
+	otherPlayer.killable = false;
 	// 1 second delay before you can kill again
-	setTimeout(() => { console.log("ready"); readyToKill = true; }, 1000);
+	setTimeout(() => { console.log("ready"); otherPlayer.killable = true; }, 1000);
 	console.log("Player Collision");
 	gPlayer.body.setVelocityY(0);
 	// otherPlayer.disableBody(true, true);
