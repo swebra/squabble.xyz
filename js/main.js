@@ -1,12 +1,13 @@
 /*  GAME    */
 
+// config spec
 let config = {
     parent: document.getElementById("game"),
     scale: { mode: Phaser.Scale.RESIZE },
     type: Phaser.AUTO,
     width: "100",
     height: "100",
-
+    // adding physics into scene
     physics: {
         default: 'arcade',
         arcade: {
@@ -14,7 +15,7 @@ let config = {
             debug: false
         }
     },
-
+    // specify functions
     scene: {
         preload: preload,
         create: create,
@@ -45,27 +46,18 @@ function create () {
     // create other players and set collision stuff
     this.otherPlayers = this.physics.add.group();
 
+    // instanciate client
     this.client = client;
-    // create static group for platforms
-    this.platforms = this.physics.add.staticGroup();
 
-    // create ground
-    this.platforms.create(400, 1000, 'ground').setScale(2).refreshBody();
-    this.platforms.create(1200, 1000, 'ground').setScale(2).refreshBody();
-    this.platforms.create(2000, 1000, 'ground').setScale(2).refreshBody();
-
-    // add platforms
-    this.platforms.create(600, 800, 'ground');
-    this.platforms.create(50, 250, 'ground');
-    this.platforms.create(750, 220, 'ground');
-
+    // create platforms
+    createLevel(this);
 
     // create player
     this.gPlayer = this.physics.add.sprite(100, 950, 'block');
-    this.gPlayer.body.setGravityY(500);
+    this.gPlayer.body.setGravityY(400);
     this.gPlayer.setCollideWorldBounds(true);
 
-    // add collision listener
+    // add collision listener for player and platforms
     this.physics.add.collider(this.gPlayer, this.platforms);
 
     // create other players and set collision stuff
@@ -83,7 +75,7 @@ function create () {
     cursors = this.input.keyboard.createCursorKeys();
 
     // set physics boundaries
-    var globalLevelWidth = 4000;
+    var globalLevelWidth = 2000;
     var globalLevelHeight = 1000;
 
     // set the boundaries of our game world
@@ -95,6 +87,21 @@ function create () {
     this.cameras.main.setBounds(0, 0, globalLevelWidth, globalLevelHeight);
     this.cameras.main.setDeadzone(50, 50);
     this.cameras.main.setBackgroundColor('#ccccff');
+}
+
+// function to create platforms
+function createLevel(game) {
+    let platformColor = 0x6666ff;
+    game.platforms = game.physics.add.staticGroup();
+    // ground
+    game.platforms.add(game.add.rectangle(1000, 990, 2000, 20, platformColor));
+    for (let i = 0; i < 10; i++) {
+        // add platforms                       x    y    w   h
+        game.platforms.add(game.add.rectangle(400*i+100, 800, 200, 30, platformColor));
+        game.platforms.add(game.add.rectangle(400*i+300, 600, 200, 30, platformColor));
+        game.platforms.add(game.add.rectangle(400*i+100, 400, 200, 30, platformColor));
+        game.platforms.add(game.add.rectangle(400*i+300, 200, 200, 30, platformColor));
+    }
 }
 
 function update () {
