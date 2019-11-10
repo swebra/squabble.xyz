@@ -141,6 +141,17 @@ function addEnemy(game, enemy) {
     // it is later when we update positions
     enemySprite.id = enemy.id;
     game.otherPlayers.add(enemySprite);
+
+    // add killing ability collider
+    game.physics.add.overlap(game.gPlayer, game.otherPlayers, playerKill, null, game);
 };
+
+function playerKill(gPlayer, otherPlayer) {
+  if (gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
+      console.log("Player Collision");
+      gPlayer.setVelocityY(0);
+      // otherPlayer.disableBody(true, true);
+  }
+}
 
 main();
