@@ -1,53 +1,65 @@
 /*  SERVER  */
-let express = require('express');
-let app = express();
-let server = require('http').Server(app);
-let io = require('socket.io').listen(server);
 
-// Store and increment the player id each time a new player adds
-let lastPlayerID = 0;
+class Server {
 
-app.use('/css',express.static(__dirname + '/css'));
-app.use('/js',express.static(__dirname + '/js'));
-app.use('/node_modules',express.static(__dirname + '/node_modules'));
-app.use('/assets',express.static(__dirname + '/assets'));
+    constructor() {
+        this.express = require('express');
+        this.app = this.express();
+        this.server = require('http').Server(this.app);
+        this.io = require('socket.io').listen(this.server);
+        this.app.use('/css', this.express.static(__dirname + '/css'));
+        this.app.use('/js', this.express.static(__dirname + '/js'));
+        this.app.use('/node_modules', this.express.static(__dirname + '/node_modules'));
+        this.app.use('/assets', this.express.static(__dirname + '/assets'));
 
-app.get('/',function(req,res){
-    res.sendFile(__dirname+'/index.html');
-});
+        this.app.get('/', (req, res) => {
+            res.sendFile(__dirname+'/index.html');
+        });
 
-server.listen(8081,function(){ // Listens to port 8081
-    console.log('Listening on '+server.address().port);
-});
+        this.server.listen(8081, () => { // Listens to port 8081
+            console.log('Listening on ' + this.server.address().port);
+        });
+        this.lastPlayerID = 0;
+        this.players = [];
+        this.setupEvents();
+    }
 
-function getAllPlayers() {
-    let players = [];
-    // Go through all open sockets and get the "player" object
-    Object.keys(io.sockets.connected).forEach((socketID) => {
-        let player = io.sockets.connected[socketID].player;
-        if (player) players.push(player);
-    });
-    return players;
+    getAllPlayers() {
+        // Go through all open sockets and get the "player" object
+        Object.keys(io.sockets.connected).forEach((socketID) => {
+            let player = io.sockets.connected[socketID].player;
+            if (player) this.players.push(player);
+        });
+        return this.players;
+    }
+
+    /*  EVENTS  */
+    setupEvents() {
+        this.io.on("connection", (socket) => {
+            /*  RX EVENTS    */
+            socket.on("newplayer", () => {
+                // Create a new "player" object and assign it to the new socket
+                // object
+                socket.player = {
+                    id: lastPlayerID++,
+                };
+                socket.emit("yourid", socket.id);
+                // Tell the new player about the other players
+    
+                socket.emit("allplayers", getAllPlayers());
+                // Tells existing players that there is a new player
+                socket.broadcast.emit("newplayer", socket.player);
+                console.log(getAllPlayers());
+            });
+
+            /*  TX EVENTS   */
+
+        });
+    }
 }
 
 function main() {
-    io.on("connection", (socket) => {
-        /* RX EVENTS */
-        socket.on("newplayer", () => {
-            // Create a new "player" object and assign it to the new socket
-            // object
-            socket.player = {
-                id: lastPlayerID++,
-            };
-            socket.emit("yourid", socket.id);
-            // Tell the new player about the other players
-
-            socket.emit("allplayers", getAllPlayers());
-            // Tells existing players that there is a new player
-            socket.broadcast.emit("newplayer", socket.player);
-            console.log(getAllPlayers());
-        });
-    });
+    let server = new Server();
 }
 
 main();
