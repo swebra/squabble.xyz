@@ -126,7 +126,7 @@ function update () {
     }
     if (cursors.up.isDown && this.gPlayer.body.touching.down) {
     // jumping
-        this.gPlayer.body.setVelocityY(-600);
+        this.gPlayer.body.setVelocityY(-300 * this.client.player.lives);
     }
 
 
@@ -143,7 +143,8 @@ function addEnemy(game, enemy) {
     const enemyRect = game.add.rectangle(enemy.posX, enemy.posY, game.playerSize,
                                          game.playerSize, enemy.color);
     game.physics.add.collider(enemyRect, game.platforms);
-    enemyRect.killable = true;
+    enemyRect.killable = false;
+    setTimeout(() => { enemyRect.killable = true; }, 1000);
     game.physics.add.collider(enemyRect, game.platforms);
 
     // add an "id" field to the rectangle object so that we can tell which player
