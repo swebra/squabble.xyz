@@ -135,6 +135,7 @@ function addEnemy(game, enemy) {
     const enemySprite = game.add.sprite(enemy.posX, enemy.posY,
 					"block");
     enemySprite.setTint(0xff0000);
+    enemySprite.killable = true;
     game.physics.add.collider(enemySprite, game.platforms);
 
     // add an "id" field to the sprite object so that we can tell which player
@@ -146,14 +147,12 @@ function addEnemy(game, enemy) {
     game.physics.add.overlap(game.gPlayer, game.otherPlayers, playerKill, null, game);
 };
 
-// guard for de-bouncing
-let readyToKill = true;
 function playerKill(gPlayer, otherPlayer) {
-    if (readyToKill && gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
+    if (otherPlayer.killable && gPlayer.y + gPlayer.height < otherPlayer.y) {// this double checks that the collision occurs on top
 	console.log("kill");
-	readyToKill = false;
+	otherPlayer.killable = false;
 	// 1 second delay before you can kill again
-	setTimeout(() => { console.log("ready"); readyToKill = true; }, 1000);
+	setTimeout(() => { console.log("ready"); otherPlayer.killable = true; }, 1000);
 	console.log("Player Collision");
 	gPlayer.setVelocityY(0);
 	// otherPlayer.disableBody(true, true);
