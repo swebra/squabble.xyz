@@ -1,5 +1,7 @@
 console.log("Creating new phaser game...");
+
 /*  GAME    */
+
 let config = {
     type: Phaser.AUTO,
     width: "100",
@@ -13,18 +15,32 @@ let config = {
     }
 };
 
-var game = new Phaser.Game(config);
+let client = new Client();
+
+function main() {
+    let game;
+    client.receiveId().then(() => {
+        console.log("resolved");
+        console.log(client.player.id);
+        game = new Phaser.Game(config);
+    });
+}
 
 function preload ()
 {
+    this.client = client;
 }
 
 function create () {
-    // Send the server a newplayer event
-    Client.askNewPlayer();
 }
 
 function update () {
+    console.log("UPDATE")
+    // console.log(this);
+    if (this.client.player === null) {
+        console.log("it is null")
+    }
+    console.log(this.client);
     cursors = this.input.keyboard.createCursorKeys();
     if (cursors.left.isDown) {
         console.log("Left");
@@ -35,6 +51,8 @@ function update () {
     else if (cursors.up.isDown || cursors.space.isDown) {
         console.log("jump");
     } else {
-        console.log("nothing");
+        //console.log("nothing");
     }
 }
+
+main();

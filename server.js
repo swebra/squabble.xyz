@@ -34,10 +34,11 @@ class Server {
                 // Create a new "player" object and assign it to the new socket
                 // object
                 socket.player = new Player(this.lastPlayerID++);
+                // update the total list of players
                 this.players.push(socket.player);
-                socket.emit("yourid", socket.id);
+                // send the client their ID
+                socket.emit("yourid", socket.player.id);
                 // Tell the new player about the other players
-    
                 socket.emit("allplayers", this.players);
                 // Tells existing players that there is a new player
                 socket.broadcast.emit("newplayer", socket.player);
