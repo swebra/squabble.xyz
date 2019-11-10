@@ -21,7 +21,8 @@ class Client {
     }
 
     killPlayer(id, damage) {
-        this.socket.emit("killplayer",{"id": id, "damage": damage});
+        // This has not been tested!
+        this.socket.emit("killplayer", {"id": id, "damage": damage});
     }
     
     receiveId() {
