@@ -1,4 +1,4 @@
-#[Squabble.xyz](squabble.xyz)
+# [Squabble.xyz](squabble.xyz)
 Submission for the 24 hour hackathon hosted by Startup Edmonton.
 
 ## Team Members
