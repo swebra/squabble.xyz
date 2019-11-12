@@ -1,4 +1,4 @@
-# [Squabble.xyz](squabble.xyz)
+# [Squabble.xyz](http://squabble.xyz)
 Submission for the 24 hour hackathon hosted by Startup Edmonton.
 
 ## Team Members
@@ -14,4 +14,4 @@ The gameplay is heavily inspired by the simple nature of other .io games, but is
 We were awarded 1st place upon completion of this hackathon.
 
 ## Running
-Inorder to run this app, install npm version 12.0 or greater. `npm install` to install dependencies, then `npm start` or `node ./server.js` to launch to port 8081. Open a browser window to localhost:8081 to play the game locally. Alternatively go to [squabble.xyz](squabble.xyz) to play our game.
+Inorder to run this app, install npm version 12.0 or greater. `npm install` to install dependencies, then `npm start` or `node ./server.js` to launch to port 8081. Open a browser window to localhost:8081 to play the game locally. Alternatively go to [squabble.xyz](http://squabble.xyz) to play our game.
