@@ -2,7 +2,11 @@
 Submission for the 24 hour hackathon hosted by Startup Edmonton.
 
 ## Team Members
-Ryan Shukla, Eric Claerhout, Konrad Staniszewski, Andrew Rooney
+
+* [Ryan Shukla](https://github.com/rpshukla)
+* [Eric Claerhout](https://github.com/imswebra)
+* [Konrad Staniszewski](https://github.com/KonradStanski)
+* [Andrew Rooney](https://github.com/arrooney)
 
 ## Project
 For this hackathon, we opted to create an online anonymous .io style multiplayer game. We used Node.js, express on the server side, socket.io for realtime multiplayer client-server information transmission, and phaser3.js for client side game physics and rendering.
