@@ -21,5 +21,5 @@ We were awarded 1st place upon completion of this hackathon.
 ## Running
 Inorder to run this app, install npm version 12.0 or greater. `npm install` to install dependencies, then `npm start` or `node ./server.js` to launch to port 8081. Open a browser window to localhost:8081 to play the game locally. Alternatively go to [squabble.xyz](http://squabble.xyz) to play our game.
 
-## UML Design
+## UML Design (No longer all-encompassing)
 ![Alt text](./squabble.png)
