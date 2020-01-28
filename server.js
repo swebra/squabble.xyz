@@ -66,10 +66,10 @@ class Server {
             socket.on("disconnect", () => {
                 // save player before deleting them?
                 let query = "INSERT INTO topPlayers\
-                        VALUES (?, ?)";
-                this.db.all(query, [socket.player.id, socket.player.score], (e, msg) => {
+                        VALUES (?, ?, ?)";
+                this.db.all(query, [socket.player.id, "PLAYERNAME", socket.player.score], (e, msg) => {
                     if (e) {
-                        console.log(e);
+                        console.log("ERROR IN STORING PLAYER RESULT.\t" + e);
                     }
                 });
                 delete this.players[socket.player.id];
@@ -111,7 +111,7 @@ class Server {
 
     getLeaderBoard() {
         // open db to get the top 3 players of all time
-        let query = "SELECT *\
+        let query = "SELECT t.pname as name, t.pscore as score\
                 FROM topPlayers t\
                 ORDER BY t.pscore DESC\
                 LIMIT 3";
