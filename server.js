@@ -17,10 +17,9 @@ class Server {
             res.sendFile(__dirname+'/index.html');
         });
 
-        this.server.listen(80, () => { // Listens to port 80
+        this.server.listen(8081, () => { // Listens to port 80
             console.log('Listening on ' + this.server.address().port);
         });
-        this.lastPlayerID = 0;
         this.players = {};
         this.setupEvents();
     }
@@ -32,9 +31,9 @@ class Server {
             socket.on("newplayer", () => {
                 // Create a new "player" object and assign it to the new socket
                 // object
-                socket.player = new Player(this.lastPlayerID++);
+                socket.player = new Player(socket.id);
                 // update the total list of players
-                this.players[socket.player.id] = socket.player;
+                this.players[socket.id] = socket.player;
                 // send the client their ID
                 socket.emit("yourplayer", socket.player); // TX
 
