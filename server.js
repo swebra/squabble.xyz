@@ -1,6 +1,8 @@
 /*  SERVER  */
 
-const Player = require("./js/player")
+const Player = require("./js/player");
+const Sqlite3 = require("sqlite3");
+const DataFile = "./data/topScores.db";
 
 class Server {
 
@@ -17,11 +19,14 @@ class Server {
             res.sendFile(__dirname+'/index.html');
         });
 
-        this.server.listen(8081, () => { // Listens to port 80
+        this.server.listen(80, () => { // Listens to port 80
             console.log('Listening on ' + this.server.address().port);
         });
         this.players = {};
         this.setupEvents();
+
+        this.db = this.openConn();
+        this.leaderboard = this.getLeaderBoard();
     }
 
     /*  EVENTS  */
@@ -59,6 +64,14 @@ class Server {
             });
 
             socket.on("disconnect", () => {
+                // save player before deleting them?
+                let query = "INSERT INTO topPlayers\
+                        VALUES (?, ?)";
+                this.db.all(query, [socket.player.id, socket.player.score], (e, msg) => {
+                    if (e) {
+                        console.log(e);
+                    }
+                });
                 delete this.players[socket.player.id];
                 // Tell other players that this player died
                 socket.player.lives = 0;
@@ -68,13 +81,14 @@ class Server {
             /*  TX EVENTS  */
             socket.on("playerupdate", (data) => {
                 // data is an updated player object
-        if (!(data.id in this.players)) {
-            // return early if player has been deleted or something
-            // weird happened
-            return;
-        }
+                if (!(data.id in this.players)) {
+                    // return early if player has been deleted or something
+                    // weird happened
+                    return;
+                }
                 this.players[data.id].posX = data.posX;
-        this.players[data.id].posY = data.posY;
+                this.players[data.id].posY = data.posY;
+                this.players[data.id].score = data.score;
                 this.updatePlayer(socket, this.players[data.id]);
             });
 
@@ -87,6 +101,30 @@ class Server {
     updatePlayer(socket, player) {
         socket.emit("updateplayer", player);
         socket.broadcast.emit("updateplayer", player);
+    }
+
+    openConn() {
+        return new Sqlite3.Database(DataFile, Sqlite3.OPEN_READWRITE, (e) => {
+            if (e) { console.log(e.message); };
+        });
+    }
+
+    getLeaderBoard() {
+        // open db to get the top 3 players of all time
+        let query = "SELECT *\
+                FROM topPlayers t\
+                ORDER BY t.pscore DESC\
+                LIMIT 3";
+
+        this.db.all(query, [], (e, res) => {
+            if (e) {
+                console.error("ERROR IN TOP PLAYER QUERY.\t" + e);
+                return {};
+            }
+            // return list of top three players
+            console.log(res);
+            return res;
+        });
     }
 }
 

@@ -5,6 +5,7 @@ class Player {
         this.posX = 0;
         this.posY = 0;
         this.lives = 3;
+        this.score = 0;
         // Randomly assign color from the colorList
         let colorList = [0xb8312f, 0xd04740, 0xe14937, 0xeb6a56, 0xf37934,
                         0xfba026, 0xfac41c, 0xf6d964, 0x60bc6c, 0x41a85f,

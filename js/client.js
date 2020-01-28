@@ -72,7 +72,7 @@ class Client {
         });
 
         this.socket.on("newplayer", (data) => {
-        addEnemy(this.game, data);
+            addEnemy(this.game, data);
         });
     }
 }
