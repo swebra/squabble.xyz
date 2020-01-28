@@ -67,7 +67,11 @@ class Server {
                 // save player before deleting them?
                 let query = "INSERT INTO topPlayers\
                         VALUES (?, ?)";
-                this.db.all(query, [socket.player.id, ])
+                this.db.all(query, [socket.player.id, socket.player.score], (e, msg) => {
+                    if (e) {
+                        console.log(e);
+                    }
+                });
                 delete this.players[socket.player.id];
                 // Tell other players that this player died
                 socket.player.lives = 0;
@@ -77,13 +81,14 @@ class Server {
             /*  TX EVENTS  */
             socket.on("playerupdate", (data) => {
                 // data is an updated player object
-        if (!(data.id in this.players)) {
-            // return early if player has been deleted or something
-            // weird happened
-            return;
-        }
+                if (!(data.id in this.players)) {
+                    // return early if player has been deleted or something
+                    // weird happened
+                    return;
+                }
                 this.players[data.id].posX = data.posX;
-        this.players[data.id].posY = data.posY;
+                this.players[data.id].posY = data.posY;
+                this.players[data.id].score = data.score;
                 this.updatePlayer(socket, this.players[data.id]);
             });
 

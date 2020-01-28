@@ -153,7 +153,7 @@ function update () {
     }
     if (cursors.up.isDown && this.gPlayer.body.touching.down) {
     // jumping
-        this.gPlayer.body.setVelocityY(Math.max(-600 - 200*score, -1000));
+        this.gPlayer.body.setVelocityY(Math.max(-600 - 200 * score, -1000));
     }
 
         // emit player movement
@@ -164,6 +164,7 @@ function update () {
         // // update server game state
         this.client.player.posX = this.gPlayer.x;
         this.client.player.posY = this.gPlayer.y;
+        this.client.player.score = score;
         this.client.playerUpdate();
     }
     // save old position data
