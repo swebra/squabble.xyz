@@ -1,6 +1,8 @@
 /*  SERVER  */
 
-const Player = require("./js/player")
+const Player = require("./js/player");
+const Sqlite3 = require("sqlite3");
+const DataFile = "./data/topScores.db";
 
 class Server {
 
@@ -22,6 +24,9 @@ class Server {
         });
         this.players = {};
         this.setupEvents();
+
+        this.db = this.openConn();
+        this.leaderboard = this.getLeaderBoard();
     }
 
     /*  EVENTS  */
@@ -59,6 +64,10 @@ class Server {
             });
 
             socket.on("disconnect", () => {
+                // save player before deleting them?
+                let query = "INSERT INTO topPlayers\
+                        VALUES (?, ?)";
+                this.db.all(query, [socket.player.id, ])
                 delete this.players[socket.player.id];
                 // Tell other players that this player died
                 socket.player.lives = 0;
@@ -87,6 +96,30 @@ class Server {
     updatePlayer(socket, player) {
         socket.emit("updateplayer", player);
         socket.broadcast.emit("updateplayer", player);
+    }
+
+    openConn() {
+        return new Sqlite3.Database(DataFile, Sqlite3.OPEN_READWRITE, (e) => {
+            if (e) { console.log(e.message); };
+        });
+    }
+
+    getLeaderBoard() {
+        // open db to get the top 3 players of all time
+        let query = "SELECT *\
+                FROM topPlayers t\
+                ORDER BY t.pscore DESC\
+                LIMIT 3";
+
+        this.db.all(query, [], (e, res) => {
+            if (e) {
+                console.error("ERROR IN TOP PLAYER QUERY.\t" + e);
+                return {};
+            }
+            // return list of top three players
+            console.log(res);
+            return res;
+        });
     }
 }
 
