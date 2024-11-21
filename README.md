@@ -1,10 +1,10 @@
-# [Squabble.xyz](http://squabble.xyz)
+# Squabble.xyz
 Submission for the 24 hour hackathon hosted by Startup Edmonton.
 
 ## Team Members
 
-* [Ryan Shukla](https://github.com/rpshukla)
-* [Eric Claerhout](https://github.com/imswebra)
+* [May Shukla](https://github.com/mayshukla)
+* [Eric Claerhout](https://github.com/swebra)
 * [Konrad Staniszewski](https://github.com/KonradStanski)
 * [Andrew Rooney](https://github.com/arrooney)
 * Taranjot Singh
